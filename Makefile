@@ -1,4 +1,4 @@
-.PHONY: help install tests coverage report
+.PHONY: help install tests report
 
 help:
 	@echo "Possible options:"
@@ -15,4 +15,4 @@ tests:
 	coverage run --source=myapp -m pytest tests -v
 
 report:
-	coverage report --fail-under=90
+	coverage report
