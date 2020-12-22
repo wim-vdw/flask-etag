@@ -74,6 +74,24 @@ def test_person_get_not_found(client, person_id):
 
 
 @pytest.mark.parametrize('person_id, person_name', testdata)
+def test_person_update_missing_json_data(client, person_id, person_name):
+    response = client.put(f'/persons/{person_id}')
+    assert response.status_code == 400
+    data = response.get_json()
+    assert 'message' in data
+    assert data['message'] == 'Missing JSON data in request'
+
+
+@pytest.mark.parametrize('person_id, person_name', testdata)
+def test_person_update_missing_fields(client, person_id, person_name):
+    response = client.put(f'/persons/{person_id}', json={})
+    assert response.status_code == 400
+    data = response.get_json()
+    assert 'message' in data
+    assert data['message'] == 'Person name is mandatory'
+
+
+@pytest.mark.parametrize('person_id, person_name', testdata)
 def test_person_update(client, person_id, person_name):
     response = client.get(f'/persons/{person_id}')
     assert response.status_code == 200
@@ -81,16 +99,6 @@ def test_person_update(client, person_id, person_name):
     person_id = data['person_id']
     person_name = data['person_name'] + 'blablabla'
     etag = response.headers['ETag']
-    response = client.put(f'/persons/{person_id}')
-    assert response.status_code == 400
-    data = response.get_json()
-    assert 'message' in data
-    assert data['message'] == 'Missing JSON data in request'
-    response = client.put(f'/persons/{person_id}', json={})
-    assert response.status_code == 400
-    data = response.get_json()
-    assert 'message' in data
-    assert data['message'] == 'Person name is mandatory'
     response = client.put(f'/persons/{person_id}', json={"person_name": person_name})
     assert response.status_code == 412
     data = response.get_json()
