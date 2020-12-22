@@ -13,8 +13,7 @@ def persons_get():
         result.append({
             'person_id': person_id,
             'person_name': persons_database[person_id]['person_name'],
-            'change_date': persons_database[person_id]['change_date'],
-            'etag': persons_database[person_id]['etag']
+            'change_date': persons_database[person_id]['change_date']
         })
     return jsonify(result), 200
 
@@ -30,8 +29,7 @@ def person_get(person_id):
     else:
         response = make_response(dict(person_id=person_id,
                                       person_name=person['person_name'],
-                                      change_date=person['change_date'],
-                                      etag=person['etag']))
+                                      change_date=person['change_date']))
         response.headers['ETag'] = person['etag']
         return response, 200
 
@@ -58,12 +56,35 @@ def person_create():
     }
     response = make_response(dict(person_id=person_id,
                                   person_name=person_name,
-                                  change_date=change_date,
-                                  etag=etag))
+                                  change_date=change_date))
     response.headers['ETag'] = etag
     return response, 201
 
 
 @etag_bp.route('/persons/<person_id>', methods=['PUT'])
 def person_update(person_id):
-    pass
+    if person_id not in persons_database:
+        return jsonify(message=f'Person with ID {person_id} not found'), 404
+    if not request.is_json:
+        return jsonify(message='Missing JSON data in request'), 400
+    data = request.get_json()
+    person_name = data.get('person_name')
+    if not person_name:
+        return jsonify(message=f'Person name is mandatory'), 400
+    person = persons_database[person_id]
+    etag = person['etag']
+    if_match = request.if_match
+    if not if_match.contains(etag):
+        return jsonify(message='Someone else already changed the data, provide recent ETag in header'), 412
+    change_date = datetime.utcnow().isoformat()
+    new_etag = hashlib.md5(change_date.encode()).hexdigest()
+    persons_database[person_id] = {
+        'person_name': person_name,
+        'change_date': change_date,
+        'etag': new_etag
+    }
+    response = make_response(dict(person_id=person_id,
+                                  person_name=person_name,
+                                  change_date=change_date))
+    response.headers['ETag'] = new_etag
+    return response, 200
