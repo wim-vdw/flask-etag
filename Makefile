@@ -1,10 +1,11 @@
-.PHONY: help install tests report
+.PHONY: help install tests report html
 
 help:
 	@echo "Possible options:"
 	@echo "  install - Install dependencies"
 	@echo "  tests   - Execute tests and coverage"
 	@echo "  report  - Generate coverage report"
+	@echo "  html    - Generate HTML report with coverage data"
 
 install:
 	python -m pip install pip setuptools --upgrade
@@ -16,3 +17,6 @@ tests:
 
 report:
 	coverage report
+
+html:
+	coverage html
