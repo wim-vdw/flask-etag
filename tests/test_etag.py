@@ -1,6 +1,7 @@
 import pytest
 
 testdata = [('1', 'Wim Van den Wyngaert'), ('2', 'Bill Gates'), ('3', 'Cristiano Ronaldo')]
+testdata_does_not_exist = ['100', '101', '102']
 
 
 def test_person_create_missing_json_data(client):
@@ -41,3 +42,34 @@ def test_person_create(client, person_id, person_name):
     data = response.get_json()
     assert 'message' in data
     assert data['message'] == f'Person with ID {person_id} already exists'
+
+
+def test_person_get_list(client):
+    response = client.get('/persons')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert isinstance(data, list)
+
+
+@pytest.mark.parametrize('person_id, person_name', testdata)
+def test_person_get(client, person_id, person_name):
+    response = client.get(f'/persons/{person_id}')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'person_id' in data
+    assert 'person_name' in data
+    assert 'change_date' in data
+    assert 'etag' in data
+    assert 'ETag' in response.headers
+    etag = response.headers['etag']
+    response = client.get(f'/persons/{person_id}', headers={'If-None-Match': etag})
+    assert response.status_code == 304
+
+
+@pytest.mark.parametrize('person_id', testdata_does_not_exist)
+def test_person_get_not_found(client, person_id):
+    response = client.get(f'/persons/{person_id}')
+    assert response.status_code == 404
+    data = response.get_json()
+    assert 'message' in data
+    assert data['message'] == f'Person with ID {person_id} not found'
