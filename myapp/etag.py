@@ -26,12 +26,11 @@ def person_get(person_id):
     if_none_match = request.if_none_match
     if if_none_match.contains(person['etag']):
         return jsonify(message='OK'), 304
-    else:
-        response = make_response(dict(person_id=person_id,
-                                      person_name=person['person_name'],
-                                      change_date=person['change_date']))
-        response.set_etag(person['etag'])
-        return response, 200
+    response = make_response(dict(person_id=person_id,
+                                  person_name=person['person_name'],
+                                  change_date=person['change_date']))
+    response.set_etag(person['etag'])
+    return response, 200
 
 
 @etag_bp.route('/persons', methods=['POST'])
