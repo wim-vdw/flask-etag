@@ -30,15 +30,15 @@ def person_get(person_id):
         response = make_response(dict(person_id=person_id,
                                       person_name=person['person_name'],
                                       change_date=person['change_date']))
-        response.headers['ETag'] = person['etag']
+        response.set_etag(person['etag'])
         return response, 200
 
 
 @etag_bp.route('/persons', methods=['POST'])
 def person_create():
-    if not request.is_json:
+    data = request.get_json(force=True, silent=True)
+    if not data:
         return jsonify(message='Missing JSON data in request'), 400
-    data = request.get_json()
     person_id = data.get('person_id')
     person_name = data.get('person_name')
     change_date = datetime.utcnow().isoformat()
@@ -57,7 +57,7 @@ def person_create():
     response = make_response(dict(person_id=person_id,
                                   person_name=person_name,
                                   change_date=change_date))
-    response.headers['ETag'] = etag
+    response.set_etag(etag)
     return response, 201
 
 
@@ -65,9 +65,9 @@ def person_create():
 def person_update(person_id):
     if person_id not in persons_database:
         return jsonify(message=f'Person with ID {person_id} not found'), 404
-    if not request.is_json:
+    data = request.get_json(force=True, silent=True)
+    if not data:
         return jsonify(message='Missing JSON data in request'), 400
-    data = request.get_json()
     person_name = data.get('person_name')
     if not person_name:
         return jsonify(message=f'Person name is mandatory'), 400
@@ -86,5 +86,5 @@ def person_update(person_id):
     response = make_response(dict(person_id=person_id,
                                   person_name=person_name,
                                   change_date=change_date))
-    response.headers['ETag'] = new_etag
+    response.set_etag(new_etag)
     return response, 200

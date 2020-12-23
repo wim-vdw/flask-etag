@@ -13,7 +13,7 @@ def test_person_create_missing_json_data(client):
 
 
 def test_person_create_missing_fields(client):
-    response = client.post('/persons', json={})
+    response = client.post('/persons', json={"field-not-needed-in-check": 1})
     assert response.status_code == 400
     data = response.get_json()
     assert 'message' in data
@@ -84,7 +84,7 @@ def test_person_update_missing_json_data(client, person_id, person_name):
 
 @pytest.mark.parametrize('person_id, person_name', testdata)
 def test_person_update_missing_fields(client, person_id, person_name):
-    response = client.put(f'/persons/{person_id}', json={})
+    response = client.put(f'/persons/{person_id}', json={'field-not-needed-in-check': 1})
     assert response.status_code == 400
     data = response.get_json()
     assert 'message' in data
