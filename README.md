@@ -7,6 +7,24 @@ ETags can be useful in the following scenarios:
 - To avoid mid-air collisions (prevent simultaneous updates of a resource from overwriting each other -> optimistic concurrency control).
 
 Reference: [ETag - HTTP | MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag)
+## Installation instructions
+Make sure Python >=3.7 is installed (important because `Python f-strings` are used).
+Clone this repository and navigate to the directory containing this repository.
+
+Prepare the Python virtual environment containing the required packages:
+```bash
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ python -m pip install --upgrade pip setuptools
+$ pip install -r requirements.txt
+```
+## Start the Flask server
+Make sure the Python virtual environment is activated, set the environment variable `FLASK_APP` pointing to the Flask application and run the Flask server:
+```bash
+$ source venv/bin/activate
+$ export FLASK_APP=myapp
+$ flask run
+```
 ## Caching of unchanged resources
 Create a new person:
 ```bash
