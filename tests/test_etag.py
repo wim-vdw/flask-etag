@@ -102,7 +102,7 @@ def test_person_update(client, person_id, person_name):
     response = client.put(f'/persons/{person_id}', json={"person_name": person_name})
     assert response.status_code == 412
     data = response.get_json()
-    assert data['message'] == 'Someone else already changed the data, provide recent ETag in header'
+    assert data['message'] == 'Data already changed, get recent resource data and ETag first'
     response = client.put(f'/persons/{person_id}', json={"person_name": person_name}, headers={'If-Match': etag})
     assert response.status_code == 200
 

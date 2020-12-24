@@ -74,7 +74,7 @@ def person_update(person_id):
     etag = person['etag']
     if_match = request.if_match
     if not if_match.contains(etag):
-        return jsonify(message='Someone else already changed the data, provide recent ETag in header'), 412
+        return jsonify(message='Data already changed, get recent resource data and ETag first'), 412
     change_date = datetime.utcnow().isoformat()
     new_etag = hashlib.md5(change_date.encode()).hexdigest()
     persons_database[person_id] = {
