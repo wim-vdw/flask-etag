@@ -7,7 +7,7 @@ ETags can be useful in the following scenarios:
 - To avoid mid-air collisions (prevent simultaneous updates of a resource from overwriting each other -> optimistic concurrency control).
 
 Reference: [ETag - HTTP | MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag)
-##Caching of unchanged resources
+## Caching of unchanged resources
 Create a new person:
 ```bash
 $ curl --request POST --include \
@@ -61,5 +61,5 @@ HTTP/1.0 304 NOT MODIFIED
 Server: Werkzeug/1.0.1 Python/3.9.1
 Date: Thu, 24 Dec 2020 10:16:37 GMT
 ```
-##Avoiding mid-air collisions
+## Avoiding mid-air collisions
 ToDo.
