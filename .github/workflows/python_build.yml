@@ -13,7 +13,9 @@ jobs:
           python-version: 3.8
       - name: Install dependencies
         run: make install
-      - name: Execute unit tests with pytest
+      - name: Install development dependencies (Pytest and Coverage)
+        run: make install-dev
+      - name: Execute unit tests with Pytest
         run: make tests
       - name: Analyse coverage report
         run: make report
