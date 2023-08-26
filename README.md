@@ -1,5 +1,5 @@
 [![Python tests](https://github.com/wim-vdw/flask-etag/workflows/Python%20tests/badge.svg)](https://github.com/wim-vdw/flask-etag/actions?query=workflow%3A%22Python+tests%22)
-# Flask ETag implementation1
+# Flask ETag implementation
 Implementation of `ETag` (entity tag) for a resource in Flask (Python) in a RESTful API. The `ETag` hash is generated based on the change date of the resource.
 
 ETags can be useful in the following scenarios:
