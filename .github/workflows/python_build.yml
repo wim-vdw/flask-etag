@@ -3,7 +3,7 @@ name: Python tests
 on:
   push:
     branches:
-      - dev/**
+      - 'dev/**'
 
 jobs:
   build-application:
