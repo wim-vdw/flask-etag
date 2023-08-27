@@ -1,9 +1,10 @@
-.PHONY: help install install-dev tests report html
+.PHONY: help install install-dev uninstall tests report html
 
 help:
 	@echo "Possible options:"
 	@echo "  install     - Install dependencies"
 	@echo "  install-dev - Install development dependencies (Pytest and Coverage)"
+	@echo "  uninstall   - Uninstall dependencies"
 	@echo "  tests       - Execute tests and coverage"
 	@echo "  report      - Generate coverage report"
 	@echo "  html        - Generate HTML report with coverage data"
@@ -14,6 +15,9 @@ install:
 
 install-dev:
 	pip install pytest coverage
+
+uninstall:
+	pip freeze | xargs pip uninstall -y
 
 tests:
 	coverage run --source=myapp -m pytest tests -v
