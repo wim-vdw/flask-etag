@@ -112,5 +112,5 @@ def test_person_update_not_found(client, person_id):
     response = client.put(f'/persons/{person_id}')
     assert response.status_code == 404
     data = response.get_json()
-    assert 'messagex' in data
+    assert 'message' in data
     assert data['message'] == f'Person with ID {person_id} not found'
