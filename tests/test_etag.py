@@ -70,7 +70,7 @@ def test_person_get_not_found(client, person_id):
     assert response.status_code == 404
     data = response.get_json()
     assert 'message' in data
-    assert data['message'] == f'Person with ID {person_id} not foundX'
+    assert data['message'] == f'Person with ID {person_id} not found'
 
 
 @pytest.mark.parametrize('person_id, person_name', testdata)
