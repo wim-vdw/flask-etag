@@ -97,7 +97,7 @@ def test_person_update(client, person_id, person_name):
     assert response.status_code == 200
     data = response.get_json()
     person_id = data['person_id']
-    person_name = data['person_name'] + 'blablabla'
+    person_name = data['person_name'] + 'blablabla1'
     etag = response.headers['ETag']
     response = client.put(f'/persons/{person_id}', json={"person_name": person_name})
     assert response.status_code == 412
