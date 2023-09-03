@@ -20,7 +20,7 @@ uninstall:
 	pip freeze | xargs pip uninstall -y
 
 tests:
-	coverage run --source=myapp -m pytest tests -v
+	coverage run --source=myapp -m pytest tests --verbose --exitfirst
 
 report:
 	coverage report

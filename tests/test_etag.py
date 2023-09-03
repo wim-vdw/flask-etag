@@ -97,7 +97,7 @@ def test_person_update(client, person_id, person_name):
     assert response.status_code == 200
     data = response.get_json()
     person_id = data['person_id']
-    person_name = data['person_name'] + 'blablabla1'
+    person_name = data['person_name'] + 'blablabla'
     etag = response.headers['ETag']
     response = client.put(f'/persons/{person_id}', json={"person_name": person_name})
     assert response.status_code == 412
@@ -112,5 +112,5 @@ def test_person_update_not_found(client, person_id):
     response = client.put(f'/persons/{person_id}')
     assert response.status_code == 404
     data = response.get_json()
-    assert 'message' in data
+    assert 'messagex' in data
     assert data['message'] == f'Person with ID {person_id} not found'
