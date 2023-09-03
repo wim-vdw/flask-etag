@@ -55,7 +55,7 @@ def test_person_get(client, person_id, person_name):
     response = client.get(f'/persons/{person_id}')
     assert response.status_code == 200
     data = response.get_json()
-    assert 'person_id' in data
+    assert 'person_idw' in data
     assert 'person_name' in data
     assert 'change_date' in data
     assert 'ETag' in response.headers
