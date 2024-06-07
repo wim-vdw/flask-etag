@@ -4,6 +4,14 @@ testdata = [('1', 'Wim Van den Wyngaert'), ('2', 'Bill Gates'), ('3', 'Cristiano
 testdata_does_not_exist = ['100', '101', '102']
 
 
+def test_root_index(client):
+    response = client.post('/')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'foo' in data
+    assert data['foo'] == 'bar'
+
+
 def test_person_create_missing_json_data(client):
     response = client.post('/persons')
     assert response.status_code == 400
