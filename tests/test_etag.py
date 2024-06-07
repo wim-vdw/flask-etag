@@ -5,7 +5,7 @@ testdata_does_not_exist = ['100', '101', '102']
 
 
 def test_root_index(client):
-    response = client.post('/')
+    response = client.get('/')
     assert response.status_code == 200
     data = response.get_json()
     assert 'foo' in data
