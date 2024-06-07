@@ -6,6 +6,12 @@ etag_bp = Blueprint('etag', __name__)
 persons_database = {}
 
 
+@etag_bp.route('/')
+def index():
+    result = {'foo': 'bar'}
+    return jsonify(result), 200
+
+
 @etag_bp.route('/persons', methods=['GET'])
 def persons_get():
     result = []
