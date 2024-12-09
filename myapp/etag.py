@@ -1,5 +1,5 @@
 from flask import Blueprint, request, make_response, jsonify
-from datetime import datetime
+from datetime import datetime, timezone
 import hashlib
 
 etag_bp = Blueprint('etag', __name__)
@@ -46,7 +46,7 @@ def person_create():
         return jsonify(message='Missing JSON data in request'), 400
     person_id = data.get('person_id')
     person_name = data.get('person_name')
-    change_date = datetime.utcnow().isoformat()
+    change_date = datetime.now(timezone.utc).isoformat()
     etag = hashlib.md5(change_date.encode()).hexdigest()
     if not person_id:
         return jsonify(message=f'Person ID is mandatory'), 400
@@ -81,7 +81,7 @@ def person_update(person_id):
     if_match = request.if_match
     if not if_match.contains(etag):
         return jsonify(message='Data already changed, get recent resource data and ETag first'), 412
-    change_date = datetime.utcnow().isoformat()
+    change_date = datetime.now(timezone.utc).isoformat()
     new_etag = hashlib.md5(change_date.encode()).hexdigest()
     persons_database[person_id] = {
         'person_name': person_name,
