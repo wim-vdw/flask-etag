@@ -14,25 +14,25 @@ Clone this repository and navigate to the directory containing this repository.
 
 Prepare the Python virtual environment containing the required packages:
 ```bash
-$ python3 -m venv venv
-$ source venv/bin/activate
-$ python -m pip install --upgrade pip setuptools
-$ pip install -r requirements.txt
+python3 -m venv venv
+source venv/bin/activate
+python -m pip install --upgrade pip setuptools
+pip install -r requirements.txt
 ```
 
 ## Start the Flask server
 Make sure the Python virtual environment is activated, set the environment variable `FLASK_APP` pointing to the Flask application and run the Flask server:
 ```bash
-$ source venv/bin/activate
-$ export FLASK_APP=myapp
-$ flask run
+source venv/bin/activate
+export FLASK_APP=myapp
+flask run
 ```
 
 ## Caching of unchanged resources (curl example)
 Create a new person:
 ```bash
-$ curl --request POST --include \
-  localhost:5000/persons \
+curl --request POST --include \
+  http://127.0.0.1:5000/persons \
   --data '{"person_id": "1", "person_name": "Wim"}'
 ```
 Results in a status code `201` and the generated `ETag` in the response header:
@@ -52,8 +52,8 @@ Date: Thu, 24 Dec 2020 10:11:52 GMT
 ```
 Retrieve the person without using the `ETag`:
 ```bash
-$ curl --request GET --include \
-   localhost:5000/persons/1
+curl --request GET --include \
+  http://127.0.0.1:5000/persons/1
 ```
 Results in a status code `200`, the `ETag` in the response header and the complete response in `JSON`:
 ```bash
@@ -72,9 +72,9 @@ Date: Thu, 24 Dec 2020 10:26:37 GMT
 ```
 Retrieve the person with the `ETag` in the `If-None-Match` request header:
 ```bash
-$ curl --request GET --include \
-   localhost:5000/persons/1 \
-   --header "If-None-Match:42e98b50d35eb07fc6d595d019cc91c7"
+curl --request GET --include \
+  http://127.0.0.1:5000/persons/1 \
+  --header "If-None-Match:42e98b50d35eb07fc6d595d019cc91c7"
 ```
 Results in a status code `304` and no response in `JSON` (client-side caching saves bandwidth):
 ```bash
@@ -86,8 +86,8 @@ Date: Thu, 24 Dec 2020 10:16:37 GMT
 ## Avoiding mid-air collisions (curl example)
 Create a new person:
 ```bash
-$ curl --request POST --include \
-  localhost:5000/persons \
+curl --request POST --include \
+  http://127.0.0.1:5000/persons \
   --data '{"person_id": "2", "person_name": "Wim"}'
 ```
 Results in a status code `201` and the generated `ETag` in the response header:
@@ -107,10 +107,10 @@ Date: Thu, 24 Dec 2020 14:01:26 GMT
 ```
 Perform a first update of the person with the `ETag` in the `If-Match` request header:
 ```bash
-$ curl --request PUT --include \
-   localhost:5000/persons/2 \
-   --data '{"person_name": "Wim - update 1"}' \
-   --header "If-Match:5f190e4939a582ca96aeefb8e2d5ee2c"
+curl --request PUT --include \
+  http://127.0.0.1:5000/persons/2 \
+  --data '{"person_name": "Wim - update 1"}' \
+  --header "If-Match:5f190e4939a582ca96aeefb8e2d5ee2c"
 ```
 Results in a status code `200` and a new generated `ETag`in the response header:
 ```bash
@@ -129,10 +129,10 @@ Date: Thu, 24 Dec 2020 14:02:40 GMT
 ```
 Perform a second update of the person with the `ETag` from the initial creation in the `If-Match` request header:
 ```bash
-$ curl --request PUT --include \
-   localhost:5000/persons/2 \
-   --data '{"person_name": "Wim - update 2"}' \
-   --header "If-Match:5f190e4939a582ca96aeefb8e2d5ee2c"
+curl --request PUT --include \
+  http://127.0.0.1:5000/persons/2 \
+  --data '{"person_name": "Wim - update 2"}' \
+  --header "If-Match:5f190e4939a582ca96aeefb8e2d5ee2c"
 ```
 Results in a status code `412` and a `JSON` response message to indicate that the resource was already changed:
 ```bash
@@ -148,8 +148,8 @@ Date: Thu, 24 Dec 2020 14:03:44 GMT
 ```
 Retrieve the most recent person data again:
 ```bash
-$ curl --request GET --include \
-   localhost:5000/persons/2
+curl --request GET --include \
+  http://127.0.0.1:5000/persons/2
 ```
 Results in a status code `200`, the most recent `ETag` in the response header and the most recent resource data in `JSON`:
 ```bash
@@ -168,10 +168,10 @@ Date: Thu, 24 Dec 2020 14:05:23 GMT
 ```
 Perform the second update again but now with the recent `ETag` in the `If-Match` request header:
 ```bash
-$ curl --request PUT --include \
-   localhost:5000/persons/2 \
-   --data '{"person_name": "Wim - update 2"}' \
-   --header "If-Match:b90595e3eae35cf10cc427cd85b264da"
+curl --request PUT --include \
+  http://127.0.0.1:5000/persons/2 \
+  --data '{"person_name": "Wim - update 2"}' \
+  --header "If-Match:b90595e3eae35cf10cc427cd85b264da"
 ```
 Results in a status code `200` now. 
 Resource correctly updated for the second time, new `ETag` available in response header:
