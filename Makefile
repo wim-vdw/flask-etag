@@ -1,13 +1,14 @@
-.PHONY: help install install-dev uninstall tests report html
+.PHONY: help install install-dev uninstall tests report html create-requirements
 
 help:
 	@echo "Possible options:"
-	@echo "  install     - Install dependencies"
-	@echo "  install-dev - Install development dependencies (Pytest and Coverage)"
-	@echo "  uninstall   - Uninstall dependencies"
-	@echo "  tests       - Execute tests and coverage"
-	@echo "  report      - Generate coverage report"
-	@echo "  html        - Generate HTML report with coverage data"
+	@echo "  install             - Install dependencies"
+	@echo "  install-dev         - Install development dependencies (Pytest and Coverage)"
+	@echo "  uninstall           - Uninstall dependencies"
+	@echo "  tests               - Execute tests and coverage"
+	@echo "  report              - Generate coverage report"
+	@echo "  html                - Generate HTML report with coverage data"
+	@echo "  create-requirements - Create/update requirements.txt from installed packages"
 
 install:
 	python -m pip install pip setuptools --upgrade
@@ -27,3 +28,6 @@ report:
 
 html:
 	coverage html
+
+create-requirements:
+	pip freeze > requirements.txt
